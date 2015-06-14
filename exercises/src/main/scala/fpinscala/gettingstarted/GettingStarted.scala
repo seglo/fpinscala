@@ -191,19 +191,3 @@ object PolymorphicFunctions {
   def compose[A,B,C](f: B => C, g: A => B): A => C =
     (a: A) => f(g(a))
 }
-
-object TestIsSorted {
-
-  import PolymorphicFunctions._
-
-  // test implementation of `isSorted`
-  def main(args: Array[String]): Unit = {
-    val sorted = Array(1, 2, 3)
-    val unsorted = Array(1, 4, 3)
-
-    val gt = (lh: Int, rh: Int) => lh < rh
-
-    println(s"Array is sorted (true): ${isSorted(sorted, gt)}")
-    println(s"Array is sorted (false): ${isSorted(unsorted, gt)}")
-  }
-}
