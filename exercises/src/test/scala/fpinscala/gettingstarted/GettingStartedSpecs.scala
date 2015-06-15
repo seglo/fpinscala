@@ -5,7 +5,7 @@ import MyModule._
 import PolymorphicFunctions._
 
 class GettingStartedSpecs extends Specification {
-  "1) Fibonacci sequence" >> {
+  "2.1) Fibonacci sequence" >> {
     "is 0 at index 0" >> {
       fib(0) mustEqual 0
     }
@@ -16,7 +16,7 @@ class GettingStartedSpecs extends Specification {
       fib(6) mustEqual 8
     }
   }
-  "2) isSorted Polymorphic function" >> {
+  "2.2) isSorted Polymorphic function" >> {
     val sortedIntArray = Array(1, 2, 3, 4)
     val unsortedIntArray = Array(1, 2, 4, 3)
     val asc = (lh: Int, rh: Int) => lh < rh
@@ -36,15 +36,15 @@ class GettingStartedSpecs extends Specification {
   }
 
   "Other polymorphic HOF's" >> {
-    "3) curry, add" >> {
+    "2.3) curry, add" >> {
       curry((a: Int, b: Int) => a + b)(1)(1) mustEqual 2
     }
 
-    "4) uncurry, add" >> {
+    "2.4) uncurry, add" >> {
       uncurry((a: Int) => (b: Int) => a + b)(1, 1) mustEqual 2
     }
 
-    "5) compose, pass through a value" >> {
+    "2.5) compose, pass through a value" >> {
       println("foo")
       compose((a: Int) => a, (b: Int) => b)(0) mustEqual 0
     }
