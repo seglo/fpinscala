@@ -45,7 +45,10 @@ class GettingStartedSpecs extends Specification {
     }
 
     "2.5) compose, pass through a value" >> {
+<<<<<<< HEAD
       println("foo")
+=======
+>>>>>>> tests
       compose((a: Int) => a, (b: Int) => b)(0) mustEqual 0
     }
   }
