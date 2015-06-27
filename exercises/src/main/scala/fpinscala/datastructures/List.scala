@@ -60,9 +60,32 @@ object List { // `List` companion object. Contains functions for creating and wo
     case Cons(_, xs) => Cons(h, xs)
   }
 
-  def drop[A](l: List[A], n: Int): List[A] = sys.error("todo")
+  def drop[A](l: List[A], n: Int): List[A] =
+    if (n <= 0) l
+    else drop(tail(l), n-1)
 
-  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = sys.error("todo")
+//  attempt #1
+//  NOTE: I misunderstood the assignment.  Only asks to drop elements from the
+//  start of the array until it hits an element that doesn't satisfy predicate.
+//  My solution drops all elements in an array that match predicate.
+//  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = {
+//    def go(acc: List[A], items: List[A]): List[A] = items match {
+//      case Nil => acc
+//      case Cons(x, xs) =>
+//        if (f(x))
+//          go(acc, xs)
+//        else
+//          go(append(acc, List(x)), xs)
+//    }
+//    go(List[A](), l)
+//  }
+
+  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = {
+    l match {
+      case Cons(x, xs) if f(x) => dropWhile(xs, f)
+      case _ => l
+    }
+  }
 
   def init[A](l: List[A]): List[A] = sys.error("todo")
 
