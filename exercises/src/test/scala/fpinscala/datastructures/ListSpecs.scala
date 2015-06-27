@@ -33,4 +33,25 @@ class ListSpecs extends Specification {
       List.setHead(a, 0) mustEqual List(0)
     }
   }
+  "3.4) List tail" >> {
+    "will drop first element" >> {
+      val a = List(1,2,3)
+      List.drop(a, 1) mustEqual List(2,3)
+    }
+    "will return empty list when dropping size of list" >> {
+      val a = List(1,2,3)
+      List.drop(a, 3) mustEqual Nil
+    }
+    "will return empty list when dropping larger than size of list" >> {
+      val a = List(1,2,3)
+      List.drop(a, 4) mustEqual Nil
+    }
+  }
+  "3.5) List dropWhile" >> {
+    "will drop first two elements that matches predicate" >> {
+      val a = List(1,2,3)
+      val p = (v: Int) => v == 1 || v == 2
+      List.dropWhile(a, p) mustEqual List(3)
+    }
+  }
 }
