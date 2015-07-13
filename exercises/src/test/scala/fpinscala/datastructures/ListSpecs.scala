@@ -87,4 +87,67 @@ class ListSpecs extends Specification {
       List.foldLeft(List(1,2,3), 0)(_ + _) mustEqual 6
     }
   }
+  "3.11) foldLeft implementations of sum, product, and length" >> {
+    "will return sum of List" >> {
+      List.foldSum(List(1,2,3)) mustEqual 6
+    }
+    "will return product of List" >> {
+      List.foldProduct(List(1,2,3)) mustEqual 6
+    }
+    "will return length of List" >> {
+      List.foldLength(List(1,2,3)) mustEqual 3
+    }
+  }
+  "3.12) foldLeft implementation of reverse" >> {
+    "will return reversed elements in a list" >> {
+      List.reverse(List(1,2,3)) mustEqual List(3,2,1)
+    }
+  }
+  "3.14) foldRight implementation of append" >> {
+    "will append two lists together" >> {
+      List.foldAppend(List(1,2,3), List(4,5,6)) mustEqual List(1,2,3,4,5,6)
+    }
+  }
+  "3.15) flatten/append" >> {
+    "will flatten a list of lists" >> {
+      List.flatten(List(List(1,2),List(3,4),List(5,6))) mustEqual List(1,2,3,4,5,6)
+    }
+  }
+  "3.16) addOne" >> {
+    "will add 1 to every element of a list" >> {
+      List.addOne(List(1,2,3)) mustEqual List(2,3,4)
+    }
+  }
+  "3.17) castToString" >> {
+    "will cast a List[Double] to List[String]" >> {
+      List.castToString(List(1.1, 2.2)) mustEqual List("1.1", "2.2")
+    }
+  }
+  "3.18) map" >> {
+    "will return a square of each element" >> {
+      List.map(List(1,2,3))(a => a*a) mustEqual List(1, 4, 9)
+    }
+  }
+  "3.19) filter" >> {
+    "will return only even numbers" >> {
+      List.filter(List(1,2,3))(_%2==0) mustEqual List(2)
+    }
+  }
+  "3.20) flatMap" >> {
+    "will return a list of duplicated values" >> {
+      List.flatMap(List(1,2,3))(i => List(i,i)) mustEqual List(1,1,2,2,3,3)
+    }
+  }
+
+  "3.21) flatMapFilter" >> {
+    "will return only even numbers" >> {
+      List.filter(List(1,2,3))(_%2==0) mustEqual List(2)
+    }
+  }
+
+//  "3.22) zipAdd" >> {
+//    "will add each element of each list in position" >> {
+//
+//    }
+//  }
 }
