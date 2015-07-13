@@ -115,5 +115,58 @@ object List { // `List` companion object. Contains functions for creating and wo
     }
   }
 
-  def map[A,B](l: List[A])(f: A => B): List[B] = sys.error("todo")
+  def foldSum(l: List[Int]): Int = foldLeft(l, 0)(_ + _)
+
+  def foldProduct(l: List[Int]): Int = foldLeft(l, 1)(_ * _)
+
+  def foldLength[A](l: List[A]): Int = foldLeft(l, 0)((acc, _) => acc + 1)
+
+  def reverse[A](l: List[A]): List[A] =
+    foldLeft(l, Nil:List[A])((acc, e) => Cons(e, acc))
+
+  def foldAppend[A](l1: List[A], l2: List[A]): List[A] =
+    foldRight(l1, l2)((e, acc) => Cons(e, acc))
+
+  def flatten[A](l: List[List[A]]): List[A] =
+    foldRight(l, Nil:List[A])((e, acc) => foldAppend(e, acc))
+
+  def addOne(l: List[Int]): List[Int] =
+    foldRight(l, Nil:List[Int])((e, acc) => Cons(e+1, acc))
+
+  def castToString(l: List[Double]): List[String] =
+    foldRight(l, Nil:List[String])((e, acc) => Cons(e.toString, acc))
+
+  def map[A,B](l: List[A])(f: A => B): List[B] =
+    foldRight(l, Nil:List[B])((e, acc) => Cons(f(e), acc))
+
+  def filter[A](l: List[A])(f: A => Boolean): List[A] =
+    foldRight(l, Nil:List[A]) { // predicate function scope
+      (e, acc) =>
+        if (f(e)) Cons(e, acc) // matches predicate
+        else acc
+    }
+
+  def flatMap[A,B](as: List[A])(f: A => List[B]): List[B] =
+    // map over initial list
+    foldRight(as, Nil:List[B]) {
+      // apply function over each item in list and then map over its values
+      (e, acc) => foldRight(f(e), acc) {
+        (e2, acc2) => Cons(e2, acc2)
+      }
+    }
+
+  def flatMapFilter[A](l: List[A])(f: A => Boolean): List[A] =
+    flatMap(l) { a =>
+      if (f(a)) List(a)
+      else Nil
+    }
+
+//  def zipAdd[Int](l1: List[Int], l2: List[Int]) = {
+//    l1 match {
+//      case Nil =>
+//      case Cons(h1:Int, t1:List[Int]) => l2 match {
+//        case Cons(h2:Int, t2:List[Int]) => Cons(h1+h2, zipAdd(t1, t2))
+//      }
+//    }
+//  }
 }
