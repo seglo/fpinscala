@@ -46,6 +46,11 @@ object List { // `List` companion object. Contains functions for creating and wo
   def sum2(ns: List[Int]) =
     foldRight(ns, 0)((x,y) => x + y)
 
+  // answer 3.7:
+  // a) foldRight will continue to recurse even when encountering a 0 because foldRight
+  //    has no special case for 0
+  // b) foldRight is not tail recursive so it will add as many recursive calls to the
+  //    call stack as there are elements in the list
   def product2(ns: List[Double]) =
     foldRight(ns, 1.0)(_ * _) // `_ * _` is more concise notation for `(x,y) => x * y`; see sidebar
 
@@ -87,11 +92,28 @@ object List { // `List` companion object. Contains functions for creating and wo
     }
   }
 
-  def init[A](l: List[A]): List[A] = sys.error("todo")
+  def init[A](l: List[A]): List[A] = {
+    def go(x: List[A], y: List[A]): List[A] = {
+      x match {
+        case Nil => Nil
+        case Cons(x, Nil) => y
+        case Cons(x, xs) => go(xs, List.append(y, List(x)))
+      }
+    }
+    go(l, Nil)
+  }
 
-  def length[A](l: List[A]): Int = sys.error("todo")
+  // can't infer type because acc is 2nd parameter?
+  def length[A](l: List[A]): Int =
+    foldRight(l, 0)((e: A, acc: Int) => acc + 1)
 
-  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = sys.error("todo")
+  @annotation.tailrec
+  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = {
+    l match {
+      case Nil => z
+      case Cons(h, t) => foldLeft(t, f(z, h))(f)
+    }
+  }
 
   def map[A,B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }
