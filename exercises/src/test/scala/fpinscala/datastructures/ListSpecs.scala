@@ -54,4 +54,37 @@ class ListSpecs extends Specification {
       List.dropWhile(a, p) mustEqual List(3)
     }
   }
+  "3.6) List init" >> {
+    "will return Nil when passed Nil" >> {
+      List.init(Nil) mustEqual Nil
+    }
+    "will return Nil when it has a size of 1" >> {
+      List.init(List(1)) mustEqual Nil
+    }
+    "will return all except the last element in a list" >> {
+      val a = List(1,2,3)
+      List.init(a) mustEqual List(1,2)
+    }
+  }
+  // 3.7) Answers included in comments of product2.  Can't think of a
+  // a test to include?  Maybe something that throws a stackoverflow
+  // exception?
+  "3.8) List foldRight with Nil accumulator" >> {
+    "calling foldRight with Nil acc will return a copy of the list" >> {
+      List.foldRight(List(1,2,3), Nil:List[Int])(Cons(_,_)) mustEqual List(1,2,3)
+    }
+  }
+  "3.9) List length" >> {
+    "will return length of a list" >> {
+      List.length(List(1,2,3)) mustEqual 3
+    }
+    "will return length of 0 given an empty list" >> {
+      List.length(Nil) mustEqual 0
+    }
+  }
+  "3.10) foldLeft" >> {
+    "will return sum of List" >> {
+      List.foldLeft(List(1,2,3), 0)(_ + _) mustEqual 6
+    }
+  }
 }
