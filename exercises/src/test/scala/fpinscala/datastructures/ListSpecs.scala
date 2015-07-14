@@ -145,9 +145,25 @@ class ListSpecs extends Specification {
     }
   }
 
-//  "3.22) zipAdd" >> {
-//    "will add each element of each list in position" >> {
-//
-//    }
-//  }
+  "3.22) zipAdd" >> {
+    "will add each element of each list in position" >> {
+      List.zipAdd(List(1,2,3), List(4,5,6)) mustEqual List(5,7,9)
+    }
+  }
+
+  "3.23) zip" >> {
+    "will zip using product operation" >> {
+      List.zip(List(1,2,3), List(4,5,6))((x, y) => x*y) mustEqual List(4,10,18)
+    }
+  }
+
+  "3.24) hasSubsequence" >> {
+    "will return true when a subsequence is present" >> {
+      List.hasSubsequence(List(1,2,3,4), List(2,3)) must beTrue
+    }
+    "will return false when a subsequence is not present" >> {
+      List.hasSubsequence(List(1,2,3,4), List(9,9)) must beFalse
+    }
+  }
+
 }
