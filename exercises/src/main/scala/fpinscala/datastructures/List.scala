@@ -161,12 +161,44 @@ object List { // `List` companion object. Contains functions for creating and wo
       else Nil
     }
 
-//  def zipAdd[Int](l1: List[Int], l2: List[Int]) = {
-//    l1 match {
-//      case Nil =>
-//      case Cons(h1:Int, t1:List[Int]) => l2 match {
-//        case Cons(h2:Int, t2:List[Int]) => Cons(h1+h2, zipAdd(t1, t2))
-//      }
-//    }
-//  }
+  // cheated!  didn't think to use a tuple in a match statement
+  def zipAdd(l1: List[Int], l2: List[Int]): List[Int] =
+    (l1, l2) match {
+      case (_, Nil) => Nil
+      case (Nil, _) => Nil
+      case (Cons(h1, t1), Cons(h2, t2)) => Cons(h1+h2, zipAdd(t1, t2))
+    }
+
+  // failed attempts with zipAdd
+  //  def zipAdd(l1: List[Int], l2: List[Int]) =
+  //    foldRight(l1, l2) { (e, acc) =>
+  //      acc match {
+  //        case Nil => acc
+  //        case Cons(h, t) => Cons(e + h, t)
+  //      }
+
+
+  //  def zipAdd[Int](l1: List[Int], l2: List[Int]) = {
+  //    l1 match {
+  //      case Nil =>
+  //      case Cons(h1:Int, t1:List[Int]) => l2 match {
+  //        case Cons(h2:Int, t2:List[Int]) => Cons(h1+h2, zipAdd(t1, t2))
+  //      }
+  //    }
+  //  }
+
+  def zip[A](l1: List[A], l2: List[A])(f: (A,A) => A): List[A] =
+    (l1, l2) match {
+      case (_, Nil) => Nil
+      case (Nil, _) => Nil
+      case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1,h2), zip(t1, t2)(f))
+    }
+
+  def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean =
+    (sup, sub) match {
+      case (_, Nil) => true // we've matched all the subset since when the recursive subsequence is empty
+      case (Nil, _) => false // if the superset is empty, but not the subset, then we haven't completed a full match
+      case (Cons(h1, t1), Cons(h2, t2)) if (h1 == h2) => hasSubsequence(t1, t2) // when the head elements match, recurse with the tail of each
+      case (Cons(h1, t1), Cons(h2, t2)) => hasSubsequence(t1, sub) // when the head elements don't match, recurse and reset subset
+    }
 }
