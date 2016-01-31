@@ -147,6 +147,34 @@ class ErrorHandlingSpecs extends Specification {
     Scalatic's Or implementation supports accumulation of errors.  The type signature would look
     like: Person Or Every[ErrorMessage]
      */
-    success
+
+    import org.scalactic._
+    import Accumulation._
+
+    case class Person(name: Name, age: Age)
+    sealed class Name(val value: String)
+    sealed class Age(val value: Int)
+
+    def mkName(name: String): Name Or One[ErrorMessage] =
+      if (name == "" || name == null) Bad(One("Name is empty."))
+      else Good(new Name(name))
+
+    def mkAge(age: Int): Age Or One[ErrorMessage] =
+      if (age < 0) Bad(One("Age is out of range."))
+      else Good(new Age(age))
+
+    def mkPerson(name: String, age: Int): Person Or Every[ErrorMessage] = {
+      val n = mkName(name)
+      val a = mkAge(age)
+      withGood(n, a)(Person.apply _)
+    }
+
+    "mkPerson returns a good person" >> {
+      mkPerson("Sean", 33).isGood mustEqual true
+    }
+    "mkPerson returns two accumulated errors" >> {
+      mkPerson("", -1) mustEqual Bad(Many("Name is empty.", "Age is out of range."))
+    }
+
   }
 }

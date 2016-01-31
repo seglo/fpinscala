@@ -7,7 +7,9 @@ object FPInScalaBuild extends Build {
     resolvers ++= Seq(
       "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
       "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"),
-    libraryDependencies ++= Seq("org.specs2" %% "specs2-core" % "3.6.1" % "test"),
+    libraryDependencies ++= Seq(
+      "org.scalactic" %% "scalactic" % "2.2.6",
+      "org.specs2" %% "specs2-core" % "3.6.1" % "test"),
     scalacOptions in Test ++= Seq("-Yrangepos")
   )
 
