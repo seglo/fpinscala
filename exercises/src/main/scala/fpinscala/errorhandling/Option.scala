@@ -1,7 +1,7 @@
 package fpinscala.errorhandling
 
 
-import scala.{Option => _, Some => _, Either => _, _} // hide std library `Option`, `Some` and `Either`, since we are writing our own in this chapter
+import scala.{Either => _, Option => _, Some => _} // hide std library `Option`, `Some` and `Either`, since we are writing our own in this chapter
 
 sealed trait Option[+A] {
   def map[B](f: A => B): Option[B] = this match {
@@ -14,6 +14,7 @@ sealed trait Option[+A] {
     case _ => default
   }
 
+  // Q, how does f fail?  "Apply f , which may fail, to the Option if not None ."
   def flatMapMatching[B](f: A => Option[B]): Option[B] = this match {
     case Some(a) => f(a)
     case _ => None
@@ -69,6 +70,7 @@ object Option {
     a.flatMap(a1 => b.flatMap(b1 => Some(f(a1, b1))))
   }
 
+  // Q, how does for know when to call map or flatMap?
   def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = for {
     a1 <- a
     b1 <- b

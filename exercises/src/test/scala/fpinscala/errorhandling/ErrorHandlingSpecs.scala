@@ -1,10 +1,8 @@
 package fpinscala.errorhandling
 
-import fpinscala.gettingstarted.{PolymorphicFunctions, MyModule}
 import org.specs2.mutable.Specification
-import fpinscala.gettingstarted.MyModule._
 
-import scala.{Option => _, Some => _, Either => _, _} // hide std library `Option`, `Some` and `Either`, since we are writing our own in this chapter
+import scala.{Either => _, Left => _, Option => _, Right => _, Some => _} // hide std library `Option` and `Either`, since we are writing our own in this chapter
 
 class ErrorHandlingSpecs extends Specification {
   "4.1) Option type" >> {
@@ -107,5 +105,48 @@ class ErrorHandlingSpecs extends Specification {
     "traverse will convert and map a function over a given list that contains a None and return None" >> {
       Option.traverse(List(1,1))(x => None) mustEqual None
     }
+  }
+  "4.6) Either implementation" >> {
+    "map over right of Either" >> {
+      Right(1).map(_ + 1) mustEqual Right(2)
+    }
+    "flatMap over right of Either" >> {
+      Right(1).flatMap(v => Right(v + 1)) mustEqual Right(2)
+    }
+    "orElse returns another value when Either is Left" >> {
+      Left("Error").orElse(Right(1)) mustEqual Right(1)
+    }
+    "map2 applies a function on two Right's and returns a Right" >> {
+      Right(1).map2(Right(2))(_ + _) mustEqual Right(3)
+    }
+    "map2 applies a function on one Right and one Left and returns a Left" >> {
+      Right(1).map2(Left("Error"))(_ + _) mustEqual Left("Error")
+      Left("Error").asInstanceOf[Either[String, Int]].map2(Right(1))(_ + _) mustEqual Left("Error")
+    }
+  }
+  "4.7) Either sequence and traversal impl." >> {
+    "sequence will transform a Sequence of Either Right's to a Right[Seq[T]]" >> {
+      Either.sequence(List(Right(1), Right(2))) mustEqual Right(Seq(1, 2))
+    }
+    "sequence will transform a Sequence of Either's that contain a Left to Left" >> {
+      Either.sequence(List[Either[String, Int]](Right(1), Left("Ahh!"))) mustEqual Left("Ahh!")
+    }
+    "traverse will convert and map a function over a given list" >> {
+      Either.traverse(List(1,1))(x => Right(x + 1)) mustEqual Right(List(2,2))
+    }
+    "traverse will convert and map a function over a given list that contains a None and return None" >> {
+      Either.traverse(List(1,1))(x => Left("Ahh!")) mustEqual Left("Ahh!")
+    }
+  }
+  "4.8) Either that can contain more than 1 error" >> {
+    /*
+    Either implementation would need to change so that when pattern matching Left[Seq[String]]
+    it would append to a Left value.  The implementation right now currently only passes the
+    first Left accumulated as the result.
+
+    Scalatic's Or implementation supports accumulation of errors.  The type signature would look
+    like: Person Or Every[ErrorMessage]
+     */
+    success
   }
 }
